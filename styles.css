@@ -1,0 +1,237 @@
+:root {
+  --teal: #4a9ea8;
+  --lavender: #9682c8;
+  --bg: #f4f1ea;
+  --card-bg: #ffffff;
+  --text: #2c2a28;
+  --text-soft: #6b6660;
+  --ring: rgba(74, 158, 168, 0.25);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1a19;
+    --card-bg: #262523;
+    --text: #f0ede6;
+    --text-soft: #b3ada4;
+    --ring: rgba(150, 130, 200, 0.28);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  background: linear-gradient(160deg, var(--bg) 0%, var(--bg) 60%, color-mix(in srgb, var(--teal) 10%, var(--bg)) 100%);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.app {
+  width: 100%;
+  max-width: 480px;
+  padding: max(24px, env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+header {
+  text-align: center;
+  padding-top: 8px;
+}
+
+header h1 {
+  font-size: 1.3rem;
+  margin: 0 0 4px;
+  letter-spacing: 0.02em;
+}
+
+header p {
+  margin: 0;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
+.quote-stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.breath-ring {
+  position: absolute;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--ring), transparent 70%);
+  animation: breathe 6s ease-in-out infinite;
+  z-index: 0;
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(0.9); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+.quote-card {
+  position: relative;
+  z-index: 1;
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 32px 24px;
+  min-height: 140px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+  font-size: 1.15rem;
+  line-height: 1.7;
+  transition: opacity 0.25s ease;
+}
+
+.quote-card.fade { opacity: 0; }
+
+.actions {
+  display: flex;
+  gap: 12px;
+}
+
+button {
+  font: inherit;
+  border: none;
+  border-radius: 14px;
+  padding: 14px 18px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: transform 0.1s ease, opacity 0.2s ease;
+}
+
+button:active { transform: scale(0.97); }
+
+.btn-primary {
+  flex: 1;
+  background: linear-gradient(135deg, var(--teal), var(--lavender));
+  color: #fff;
+  font-weight: 600;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-soft);
+  border: 1px solid color-mix(in srgb, var(--text-soft) 35%, transparent);
+}
+
+section.card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 18px 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+section.card h2 {
+  font-size: 0.95rem;
+  margin: 0 0 12px;
+  color: var(--text-soft);
+  font-weight: 600;
+}
+
+.times-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.time-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: color-mix(in srgb, var(--teal) 12%, transparent);
+  color: var(--teal);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.time-chip button {
+  padding: 0;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--teal) 25%, transparent);
+  color: var(--teal);
+  font-size: 0.75rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.add-time-row {
+  display: flex;
+  gap: 8px;
+}
+
+.add-time-row input[type="time"] {
+  flex: 1;
+  font: inherit;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in srgb, var(--text-soft) 30%, transparent);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.status-row p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-soft);
+  flex: 1;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.dot.ok { background: #57b894; }
+.dot.warn { background: #e0a63f; }
+.dot.off { background: #c0574f; }
+
+.note {
+  font-size: 0.78rem;
+  color: var(--text-soft);
+  line-height: 1.6;
+  margin: 0;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  padding-bottom: 12px;
+}

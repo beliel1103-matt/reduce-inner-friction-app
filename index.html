@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>少內耗</title>
+<meta name="description" content="每天固定時間,提醒你放下內耗、回到當下。" />
+<link rel="manifest" href="manifest.webmanifest" />
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<meta name="theme-color" content="#4a9ea8" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="apple-mobile-web-app-title" content="少內耗" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app">
+  <header>
+    <h1>少內耗</h1>
+    <p>放下反覆的念頭,回到此刻</p>
+  </header>
+
+  <div class="quote-stage">
+    <div class="breath-ring" aria-hidden="true"></div>
+    <div class="quote-card" id="quoteCard">正在準備一句提醒…</div>
+  </div>
+
+  <div class="actions">
+    <button class="btn-primary" id="nextBtn">現在需要一句</button>
+  </div>
+
+  <section class="card">
+    <h2>提醒通知</h2>
+    <div class="status-row">
+      <p id="permStatus"></p>
+      <button class="btn-secondary" id="permBtn">開啟通知</button>
+    </div>
+    <p class="note">建議先把這個網頁「加入主畫面」變成一個 App 圖示再開啟通知,提醒會更穩定。手機鎖螢幕或 App 完全被關閉太久時,系統可能會延後或省略推播,這是所有瀏覽器類 App 共同的限制;每次打開 App 時,今天錯過的提醒也會補上。</p>
+  </section>
+
+  <section class="card">
+    <h2>每天提醒時間</h2>
+    <div class="times-list" id="timesList"></div>
+    <div class="add-time-row">
+      <input type="time" id="addTimeInput" value="09:00" />
+      <button class="btn-secondary" id="addTimeBtn">新增時間</button>
+    </div>
+  </section>
+
+  <footer>加入主畫面後開啟通知,體驗最完整</footer>
+</div>
+
+<script src="quotes.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
