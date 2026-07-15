@@ -134,6 +134,62 @@ button:active { transform: scale(0.97); }
   border: 1px solid color-mix(in srgb, var(--text-soft) 35%, transparent);
 }
 
+.btn-like {
+  flex: 0 0 auto;
+  width: 52px;
+  background: var(--card-bg);
+  color: var(--text-soft);
+  border: 1px solid color-mix(in srgb, var(--text-soft) 25%, transparent);
+  font-size: 1.3rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-like.liked {
+  color: #e0574f;
+  border-color: color-mix(in srgb, #e0574f 40%, transparent);
+}
+
+.favorites-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.fav-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  background: color-mix(in srgb, var(--teal) 8%, transparent);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.fav-item span {
+  flex: 1;
+}
+
+.fav-item button {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--text-soft) 20%, transparent);
+  color: var(--text-soft);
+  font-size: 0.75rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 section.card {
   background: var(--card-bg);
   border-radius: 16px;

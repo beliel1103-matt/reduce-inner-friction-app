@@ -12,9 +12,10 @@ function loadSettings() {
     parsed.shownLog = parsed.shownLog || {};
     parsed.bag = Array.isArray(parsed.bag) ? parsed.bag : [];
     parsed.intenseMode = !!parsed.intenseMode;
+    parsed.favorites = Array.isArray(parsed.favorites) ? parsed.favorites : [];
     return parsed;
   } catch {
-    return { times: [...DEFAULT_TIMES], shownLog: {}, bag: [], intenseMode: false };
+    return { times: [...DEFAULT_TIMES], shownLog: {}, bag: [], intenseMode: false, favorites: [] };
   }
 }
 
@@ -66,13 +67,67 @@ const timesList = document.getElementById("timesList");
 const addTimeInput = document.getElementById("addTimeInput");
 const addTimeBtn = document.getElementById("addTimeBtn");
 const intenseToggle = document.getElementById("intenseToggle");
+const likeBtn = document.getElementById("likeBtn");
+const favoritesList = document.getElementById("favoritesList");
+const favCount = document.getElementById("favCount");
+const favEmptyNote = document.getElementById("favEmptyNote");
+
+let currentQuoteText = "";
 
 function showQuote(text) {
   quoteCard.classList.add("fade");
   setTimeout(() => {
     quoteCard.textContent = text;
     quoteCard.classList.remove("fade");
+    currentQuoteText = text;
+    renderLikeBtn();
   }, 180);
+}
+
+function renderLikeBtn() {
+  const liked = settings.favorites.includes(currentQuoteText);
+  likeBtn.textContent = liked ? "♥" : "♡";
+  likeBtn.classList.toggle("liked", liked);
+  likeBtn.setAttribute("aria-label", liked ? "取消收藏這句" : "收藏這句");
+}
+
+function toggleLike() {
+  if (!currentQuoteText) return;
+  const idx = settings.favorites.indexOf(currentQuoteText);
+  if (idx === -1) {
+    settings.favorites.push(currentQuoteText);
+  } else {
+    settings.favorites.splice(idx, 1);
+  }
+  saveSettings(settings);
+  renderLikeBtn();
+  renderFavorites();
+}
+
+function removeFavorite(text) {
+  settings.favorites = settings.favorites.filter((q) => q !== text);
+  saveSettings(settings);
+  renderFavorites();
+  renderLikeBtn();
+}
+
+function renderFavorites() {
+  favoritesList.innerHTML = "";
+  favCount.textContent = settings.favorites.length ? `(${settings.favorites.length})` : "";
+  favEmptyNote.style.display = settings.favorites.length ? "none" : "block";
+  for (const q of settings.favorites) {
+    const item = document.createElement("div");
+    item.className = "fav-item";
+    const span = document.createElement("span");
+    span.textContent = q;
+    const removeBtn = document.createElement("button");
+    removeBtn.textContent = "×";
+    removeBtn.setAttribute("aria-label", "移除收藏");
+    removeBtn.addEventListener("click", () => removeFavorite(q));
+    item.appendChild(span);
+    item.appendChild(removeBtn);
+    favoritesList.appendChild(item);
+  }
 }
 
 function renderTimes() {
@@ -221,12 +276,14 @@ function init() {
   showQuote(nextQuote());
   renderTimes();
   renderPermStatus();
+  renderFavorites();
   catchUpMissed();
   rescheduleAll();
 
   intenseToggle.checked = settings.intenseMode;
 
   nextBtn.addEventListener("click", () => showQuote(nextQuote()));
+  likeBtn.addEventListener("click", toggleLike);
   permBtn.addEventListener("click", requestPermission);
   addTimeBtn.addEventListener("click", () => {
     addTime(addTimeInput.value);
