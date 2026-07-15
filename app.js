@@ -11,9 +11,10 @@ function loadSettings() {
     }
     parsed.shownLog = parsed.shownLog || {};
     parsed.bag = Array.isArray(parsed.bag) ? parsed.bag : [];
+    parsed.intenseMode = !!parsed.intenseMode;
     return parsed;
   } catch {
-    return { times: [...DEFAULT_TIMES], shownLog: {}, bag: [] };
+    return { times: [...DEFAULT_TIMES], shownLog: {}, bag: [], intenseMode: false };
   }
 }
 
@@ -36,10 +37,15 @@ function pruneOldLog() {
   }
 }
 
+function activePool() {
+  return settings.intenseMode ? QUOTES.concat(INTENSE_QUOTES) : QUOTES;
+}
+
 // Shuffle-bag: draw quotes without repeats until the bag is exhausted, then reshuffle.
 function nextQuote() {
-  if (settings.bag.length === 0) {
-    const idx = QUOTES.map((_, i) => i);
+  const pool = activePool();
+  if (settings.bag.length === 0 || settings.bag.some((i) => i >= pool.length)) {
+    const idx = pool.map((_, i) => i);
     for (let i = idx.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [idx[i], idx[j]] = [idx[j], idx[i]];
@@ -48,7 +54,7 @@ function nextQuote() {
   }
   const i = settings.bag.pop();
   saveSettings(settings);
-  return QUOTES[i];
+  return pool[i];
 }
 
 // ---------- UI ----------
@@ -59,6 +65,7 @@ const permStatus = document.getElementById("permStatus");
 const timesList = document.getElementById("timesList");
 const addTimeInput = document.getElementById("addTimeInput");
 const addTimeBtn = document.getElementById("addTimeBtn");
+const intenseToggle = document.getElementById("intenseToggle");
 
 function showQuote(text) {
   quoteCard.classList.add("fade");
@@ -217,10 +224,18 @@ function init() {
   catchUpMissed();
   rescheduleAll();
 
+  intenseToggle.checked = settings.intenseMode;
+
   nextBtn.addEventListener("click", () => showQuote(nextQuote()));
   permBtn.addEventListener("click", requestPermission);
   addTimeBtn.addEventListener("click", () => {
     addTime(addTimeInput.value);
+  });
+  intenseToggle.addEventListener("change", () => {
+    settings.intenseMode = intenseToggle.checked;
+    settings.bag = [];
+    saveSettings(settings);
+    showQuote(nextQuote());
   });
 
   document.addEventListener("visibilitychange", () => {
